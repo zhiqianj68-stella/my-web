@@ -34,7 +34,7 @@ function App() {
         <p className="section-label">{t.projects.sectionLabel}</p>
         <h2 id="projects-title">{t.projects.title}</h2>
       <div className="project-links">
-          <a href="https://survey-tau-one.vercel.app" target="_blank" rel="noreferrer">{t.projects.surveyManagement}<span aria-hidden="true">↗</span></a>
+          <a href="https://survey-tau-one.vercel.app/admin" target="_blank" rel="noreferrer">{t.projects.surveyManagement}<span aria-hidden="true">↗</span></a>
           <a href="https://2024zuel-report.vercel.app" target="_blank" rel="noreferrer">{t.projects.zuelReport}<span aria-hidden="true">↗</span></a>
       </div>
       </section>
