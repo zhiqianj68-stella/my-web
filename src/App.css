@@ -5,6 +5,62 @@
   text-align: center;
 }
 
+.home {
+  position: relative;
+  margin-top: 100px;
+}
+
+.language-switcher {
+  position: absolute;
+  top: -72px;
+  right: 0;
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 10px;
+}
+
+.language-switcher button {
+  padding: 0.4rem 0.75rem;
+  background: transparent;
+}
+
+.language-switcher button.active {
+  background: #646cff;
+  color: #fff;
+}
+
+.project-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.project-links a {
+  padding: 0.6em 1.2em;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: #1a1a1a;
+  transition: border-color 0.25s;
+}
+
+.project-links a:hover {
+  border-color: #646cff;
+}
+
+@media (prefers-color-scheme: light) {
+  .language-switcher {
+    border-color: rgb(0 0 0 / 14%);
+  }
+
+  .project-links a {
+    background: #f9f9f9;
+  }
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
