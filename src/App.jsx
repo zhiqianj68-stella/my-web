@@ -1,45 +1,93 @@
+import { useState } from 'react'
 import './App.css'
-import { useI18n } from './i18n/context'
+import desktopBackground from './assets/bg-pc.jpg'
+import mobileBackground from './assets/bg-mb.jpg'
+import illustrations from './assets/portfolio-illustrations.png'
+
+const stories = [
+  { number: '01', title: 'Who', chinese: '我是谁？', detail: '学生 / 教育背景 / 实习经历', art: 'student' },
+  { number: '02', title: 'What', chinese: '我在做什么？', detail: '研究兴趣 / 项目 / 技能', art: 'books' },
+  { number: '03', title: 'Why', chinese: '为什么做这个网站？', detail: '初衷 / 价值观 / 未来计划', art: 'signpost' },
+]
+
+const projects = [
+  {
+    title: 'Campus Annual Bill', chinese: '校园年度账单系统', tags: ['Vue3', 'Ant Design', '数据可视化'],
+    href: 'https://2024zuel-report.vercel.app', kind: 'campus',
+  },
+  {
+    title: 'LLM-driven Rumor Detection', chinese: '大创项目：模力智鉴', tags: ['Python', 'NLP', '多模态融合'],
+    href: 'https://survey-tau-one.vercel.app', kind: 'research',
+  },
+]
 
 function App() {
-  const { locale, setLocale, t } = useI18n()
-  const scrollToProjects = () => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })
+  const [activeStory, setActiveStory] = useState(1)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <main>
-      <section className="hero" aria-labelledby="hero-title">
-        <div className="hero__glow hero__glow--one" aria-hidden="true" />
-        <div className="hero__glow hero__glow--two" aria-hidden="true" />
-        <div className="hero__grid" aria-hidden="true" />
-        <nav className="nav" aria-label={t.navigation.label}>
-          <a className="brand" href="#top" aria-label={t.navigation.homeLabel}><span className="brand__mark">&lt;/&gt;</span><span>{t.navigation.brand}</span></a>
-      <div className="language-switcher" aria-label={t.language.switchLabel}>
-            <button className={locale === 'zh-CN' ? 'active' : ''} type="button" onClick={() => setLocale('zh-CN')} aria-pressed={locale === 'zh-CN'}>中</button>
-            <button className={locale === 'en-US' ? 'active' : ''} type="button" onClick={() => setLocale('en-US')} aria-pressed={locale === 'en-US'}>EN</button>
-      </div>
+    <main className="page-shell" style={{ '--desktop-bg': `url(${desktopBackground})`, '--mobile-bg': `url(${mobileBackground})`, '--story-art': `url(${illustrations})` }}>
+      <header className="topbar">
+        <a className="wordmark" href="#home" aria-label="回到首页">MY WORLD<span>✦</span></a>
+        <nav className={menuOpen ? 'main-nav is-open' : 'main-nav'} aria-label="主导航">
+          <a href="#about" onClick={() => setMenuOpen(false)}>关于我</a>
+          <a href="#projects" onClick={() => setMenuOpen(false)}>项目作品</a>
+          <a href="mailto:hello@example.com" onClick={() => setMenuOpen(false)}>联系我</a>
         </nav>
-        <div className="hero__content" id="top">
-          <p className="hero__eyebrow">{t.hero.eyebrow}</p>
-          <h1 id="hero-title">{t.hero.greeting}<span>{t.hero.role}</span></h1>
-          <p className="hero__description">{t.hero.description}</p>
-          <div className="hero__actions">
-            <button className="button button--primary" type="button" onClick={scrollToProjects}>{t.hero.viewProjects}<span aria-hidden="true">↓</span></button>
-            <a className="button button--secondary" href="mailto:your-email@example.com">{t.hero.contactMe}<span aria-hidden="true">↗</span></a>
+        <button className="menu-toggle" type="button" aria-label="切换导航" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}><span /><span /></button>
+      </header>
+
+      <section className="hero" id="home" aria-labelledby="hero-title">
+        <div className="hero-scene">
+          <div className="scene-meta"><span><span className="meta-icon">▦</span> 2026 / 10 / 27 <i>Mon</i> <i>21:36</i></span><span>◉ &nbsp;12,486</span></div>
+          <div className="language-switch"><span>中</span><b />EN</div>
+          <div className="hero-copy">
+            <p className="handwriting">Hi,</p>
+            <h1 id="hero-title">Welcome to<br /><em>My World</em></h1>
+            <p className="hero-chinese">在探索中，成为更好的自己。</p>
+            <p className="hero-words">Explore <span>·</span> Learn <span>·</span> Build <span>·</span> Grow</p>
           </div>
-          <ul className="tech-list" aria-label={t.hero.techStackLabel}>{t.hero.techStack.map((technology) => <li key={technology}>{technology}</li>)}</ul>
+          <div className="paper-plane" aria-hidden="true">➤</div>
+          <div className="hero-doodle" aria-hidden="true">⌁</div>
         </div>
-        <div className="scroll-hint" aria-hidden="true"><span />{t.hero.scrollHint}</div>
+
+        <div className="story-grid" id="about">
+          {stories.map((story, index) => (
+            <button className={`story-card ${activeStory === index ? 'is-active' : ''}`} key={story.number} onClick={() => setActiveStory(index)} aria-pressed={activeStory === index}>
+              <span className="story-number">{story.number}</span>
+              <span className="story-title">{story.title}</span>
+              <span className={`story-art art-${story.art}`} aria-hidden="true" />
+              <span className="story-arrow" aria-hidden="true">↗</span>
+              <span className="story-chinese">{story.chinese}</span>
+              <span className="story-detail">{story.detail} …</span>
+            </button>
+          ))}
+        </div>
+        <div className="story-hint"><span>←</span> 左右滑动 / 点击卡片 <span>→</span></div>
+        <div className="story-dots" aria-label="选择个人介绍卡片">
+          {stories.map((story, index) => <button key={story.number} aria-label={`显示 ${story.title}`} aria-pressed={activeStory === index} onClick={() => setActiveStory(index)} />)}
+        </div>
       </section>
-      <section className="projects-preview" id="projects" aria-labelledby="projects-title">
-        <p className="section-label">{t.projects.sectionLabel}</p>
-        <h2 id="projects-title">{t.projects.title}</h2>
-      <div className="project-links">
-          <a href="https://survey-tau-one.vercel.app/admin" target="_blank" rel="noreferrer">{t.projects.surveyManagement}<span aria-hidden="true">↗</span></a>
-          <a href="https://2024zuel-report.vercel.app" target="_blank" rel="noreferrer">{t.projects.zuelReport}<span aria-hidden="true">↗</span></a>
-      </div>
+
+      <section className="projects-section" id="projects" aria-labelledby="projects-title">
+        <div className="section-heading">
+          <div><h2 id="projects-title">Projects <span>✦</span></h2><p><i /> 项目快览 <i /></p></div>
+          <a className="view-all" href="#project-list">VIEW ALL <span>→</span></a>
+        </div>
+        <div className="project-grid" id="project-list">
+          {projects.map(project => (
+            <a className="project-card" href={project.href} target="_blank" rel="noreferrer" key={project.title}>
+              <div className={`project-preview preview-${project.kind}`} aria-hidden="true">
+                <div className="preview-window"><span className="preview-brand">✦ {project.kind === 'campus' ? 'Campus' : 'Research Lab'}</span><div className="preview-content"><div className="preview-chart"><i /><i /><i /><i /><i /><i /></div><div className="preview-side"><i /><i /><i /></div></div></div>
+              </div>
+              <div className="project-info"><div><h3>{project.title}</h3><p>{project.chinese}</p></div><div className="project-tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div><span className="project-open" aria-hidden="true">↗</span></div>
+            </a>
+          ))}
+        </div>
       </section>
+      <footer className="footer"><span>用好奇心记录每一步。</span><span>© 2026 My World</span></footer>
     </main>
   )
 }
 
-export default App;
+export default App
