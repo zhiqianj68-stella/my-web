@@ -16,7 +16,7 @@
 .language-switch { position: absolute; z-index: 1; right: 34px; top: 65px; display: flex; align-items: center; gap: 10px; font-size: 12px; }
 .language-switch b { height: 14px; width: 1px; background: currentColor; opacity: .5; }
 .hero-copy { position: absolute; z-index: 1; left: 10.2%; top: 16%; }
-.handwriting { margin: 0 0 -8px -8px; font: italic 58px/1 'Noto Serif SC', Georgia, serif; transform: rotate(-9deg); }
+.handwriting { margin: 0 0 20px -8px; font: italic 58px/1 'Noto Serif SC', Georgia, serif; transform: rotate(-9deg); }
 .hero-copy h1 { margin: 0; font: 500 clamp(50px, 6vw, 82px)/.98 Georgia, 'Times New Roman', serif; letter-spacing: -.045em; }
 .hero-copy h1 em { font-style: normal; padding-left: 55px; }
 .hero-chinese { margin: 34px 0 10px 28px; font: 500 23px/1.5 'Noto Serif SC', serif; letter-spacing: .18em; color: #fff; text-shadow: 0 1px 8px rgba(32,40,72,.5); }
@@ -29,13 +29,11 @@
 .story-card:hover, .story-card.is-active { transform: translateY(-4px); box-shadow: 0 18px 42px rgba(64,65,120,.15); }
 .story-number { display: block; color: #8384ae; font: 18px Georgia, serif; }
 .story-title { display: block; margin-top: 4px; font: 32px Georgia, serif; color: #11142b; }
-.story-art { position: absolute; width: 47%; height: 60%; right: 6%; top: 7%; background-image: var(--story-art); background-repeat: no-repeat; background-size: 300% 100%; }
-.art-student { background-position: left center; }
-.art-books { background-position: center center; }
-.art-signpost { background-position: right center; }
-.story-arrow { display: grid; place-items: center; position: absolute; left: 25px; top: 104px; width: 30px; height: 30px; border-radius: 50%; color: white; background: #a1a1c5; font-size: 17px; }
+.story-art { position: absolute; width: 47%; height: 60%; right: 6%; top: 7%; background-repeat: no-repeat; background-position: center; background-size: contain; }
+.story-arrow { display: grid; place-items: center; position: absolute; right: 18px; bottom: 13px; width: 30px; height: 30px; border-radius: 50%; color: white; background: #a1a1c5; font-size: 17px; }
+.story-arrow { text-decoration: none; }
 .story-chinese { display: block; position: absolute; bottom: 43px; left: 25px; font: 600 16px 'Noto Serif SC', serif; }
-.story-detail { display: block; position: absolute; bottom: 20px; left: 25px; right: 15px; color: #73758f; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.story-detail { display: block; position: absolute; bottom: 20px; left: 25px; right: 58px; color: #73758f; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .story-hint, .story-dots { display: none; }
 .projects-section { padding: 31px 36px 28px; background: #f7f6ff; }
 .section-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 19px; }
@@ -65,8 +63,35 @@
 .project-tags span { padding: 4px 7px; border-radius: 7px; background: #f0f0f8; color: #676986; font-size: 9px; white-space: nowrap; }
 .project-open { display: grid; place-items: center; flex: 0 0 27px; width: 27px; height: 27px; border: 1px solid #b8bad4; border-radius: 50%; font-size: 14px; }
 .footer { display: flex; justify-content: space-between; padding: 18px 36px 5px; color: #85859e; font-size: 11px; }
+.story-page { width: min(100% - 48px, 1000px); min-height: 100vh; margin: 0 auto; color: #191a36; }
+.story-page-header { height: 76px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e7e6f2; }
+.story-page-brand { font-size: 13px; font-weight: 700; letter-spacing: .14em; }
+.story-page-brand span { color: #8385c2; }
+.story-page-back { color: #656681; font-size: 13px; }
+.story-page-hero { display: flex; align-items: center; justify-content: space-between; min-height: 320px; padding: 40px 7%; border-radius: 0 0 22px 22px; background: linear-gradient(135deg, #f4f1ff, #fbf8ff 65%, #f2f4ff); }
+.story-page-number { color: #8586b2; font: 14px Georgia, serif; letter-spacing: .1em; }
+.story-page-hero h1 { margin: 12px 0; font: 500 clamp(34px, 5vw, 56px)/1.2 'Noto Serif SC', Georgia, serif; }
+.story-page-summary { max-width: 490px; color: #666780; font: 16px/1.9 'Noto Serif SC', serif; }
+.story-page-hero img { width: 34%; max-height: 250px; object-fit: contain; }
+.story-page-sections { display: grid; gap: 14px; padding: 34px 7%; }
+.story-page-section { display: grid; grid-template-columns: 48px 1fr; gap: 18px; padding: 24px 26px; border: 1px solid #e8e7f1; border-radius: 14px; background: #fff; }
+.story-page-section > span { color: #8586b2; font: 16px Georgia, serif; }
+.story-page-section h2 { margin: 0 0 9px; font: 600 20px 'Noto Serif SC', serif; }
+.story-page-section p { margin: 0; color: #666780; font: 14px/1.9 'Noto Serif SC', serif; white-space: pre-line; }
+.story-page-footer { display: flex; justify-content: space-between; padding: 18px 7%; color: #85859e; font-size: 11px; }
 
 @media (max-width: 760px) {
+  .story-page { width: min(100% - 32px, 560px); }
+  .story-page-header { height: 60px; }
+  .story-page-hero { min-height: 0; padding: 26px 20px; border-radius: 0 0 16px 16px; }
+  .story-page-hero h1 { font-size: 30px; }
+  .story-page-summary { font-size: 13px; }
+  .story-page-hero img { width: 32%; max-height: 130px; }
+  .story-page-sections { gap: 10px; padding: 20px 0; }
+  .story-page-section { grid-template-columns: 30px 1fr; gap: 10px; padding: 18px 15px; }
+  .story-page-section h2 { font-size: 17px; }
+  .story-page-section p { font-size: 12px; }
+  .story-page-footer { padding: 14px 0; }
   .page-shell { width: 100%; padding: 0 0 16px; }
   .topbar { height: 58px; padding: 0 20px; }
   .wordmark { font-size: 11px; }
@@ -89,20 +114,20 @@
   .hero-words { margin: 0; font-size: 11px; letter-spacing: .08em; }
   .paper-plane { top: 34%; left: auto; right: 13%; font-size: 41px; }
   .hero-doodle { right: 9%; bottom: 17%; font-size: 38px; }
-  .story-grid { display: flex; align-items: end; gap: 0; height: 236px; margin: -102px -1px 0; perspective: 900px; }
-  .story-card { flex: 0 0 35%; height: 205px; padding: 17px 12px 14px; border-radius: 14px; transform-origin: center bottom; }
+  .story-grid { display: flex; align-items: end; gap: 0; height: 236px; margin: -140px -1px 0; perspective: 900px; }
+  .story-card { flex: 0 0 35%; height: 215px; padding: 17px 12px 14px; border-radius: 14px; transform-origin: center bottom; }
   .story-card:nth-child(1) { z-index: 1; transform: perspective(700px) rotateY(18deg) scale(.93); margin-right: -7%; }
-  .story-card:nth-child(2) { z-index: 2; height: 226px; flex-basis: 39%; }
+  .story-card:nth-child(2) { z-index: 2; height: 236px; flex-basis: 39%; }
   .story-card:nth-child(3) { z-index: 1; transform: perspective(700px) rotateY(-18deg) scale(.93); margin-left: -7%; }
-  .story-card:nth-child(1).is-active { transform: perspective(700px) rotateY(12deg) scale(.98) translateY(-6px); }
-  .story-card:nth-child(2).is-active { transform: translateY(-6px); }
-  .story-card:nth-child(3).is-active { transform: perspective(700px) rotateY(-12deg) scale(.98) translateY(-6px); }
+  .story-card:nth-child(1).is-active { z-index: 4; transform: perspective(700px) rotateY(12deg) scale(.98) translateY(-6px); }
+  .story-card:nth-child(2).is-active { z-index: 4; transform: translateY(-6px); }
+  .story-card:nth-child(3).is-active { z-index: 4; transform: perspective(700px) rotateY(-12deg) scale(.98) translateY(-6px); }
   .story-number { font-size: 13px; }
   .story-title { margin-top: 3px; font-size: clamp(20px, 6vw, 27px); }
-  .story-art { width: 90%; height: 43%; right: 5%; top: 38%; }
+  .story-art { width: 86%; height: 40%; right: 5%;top: 25% }
   .story-arrow { display: none; }
-  .story-chinese { left: 10px; right: 7px; bottom: 29px; font-size: 10px; white-space: nowrap; }
-  .story-detail { left: 10px; bottom: 11px; font-size: 8px; }
+  .story-chinese { left: 10px; right: 7px;  font-size: 10px; white-space: nowrap; }
+  .story-detail { left: 10px; bottom: 31px; font-size: 8px; }
   .story-hint { display: flex; justify-content: center; gap: 8px; margin-top: 16px; color: #777991; font-size: 10px; }
   .story-dots { display: flex; justify-content: center; gap: 6px; margin-top: 12px; }
   .story-dots button { width: 6px; height: 6px; padding: 0; border: 0; border-radius: 50%; background: #d5d4e5; }
