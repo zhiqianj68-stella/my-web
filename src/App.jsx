@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import desktopBackground from './assets/bg-pc.jpg'
 import mobileBackground from './assets/bg-mb.jpg'
@@ -21,7 +21,7 @@ const projects = [
   },
   {
     title: 'LLM-driven Rumor Detection', chinese: '大创项目：模力智鉴', tags: ['Python', 'NLP', '多模态融合'],
-    href: 'https://survey-tau-one.vercel.app', kind: 'research',
+    href: 'https://survey-tau-one.vercel.app/admin', kind: 'research',
   },
 ]
 
@@ -57,11 +57,26 @@ function App() {
   const [activeStory, setActiveStory] = useState(1)
   const [menuOpen, setMenuOpen] = useState(false)
   const [now, setNow] = useState(() => new Date())
+  const [pageViews, setPageViews] = useState(null)
+  const countStarted = useRef(false)
   const currentStory = stories.find(story => window.location.pathname === `/${story.slug}`)
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 15_000)
     return () => window.clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    if (countStarted.current) return
+    countStarted.current = true
+
+    fetch('https://jiangzhiqian-counter.1958278841.workers.dev/count', { method: 'POST' })
+      .then(response => {
+        if (!response.ok) throw new Error('Counter request failed')
+        return response.json()
+      })
+      .then(data => setPageViews(data.count))
+      .catch(error => console.error('Unable to load page view count:', error))
   }, [])
 
   const dateText = `${now.getFullYear()} / ${now.getMonth() + 1} / ${now.getDate()}`
@@ -86,7 +101,7 @@ function App() {
 
       <section className="hero" id="home" aria-labelledby="hero-title">
         <div className="hero-scene">
-          <div className="scene-meta"><span><span className="meta-icon">▦</span> {dateText} <i>{weekdayText}</i> <i>{timeText}</i></span><span>◉ &nbsp;12,486</span></div>
+          <div className="scene-meta"><span><span className="meta-icon">▦</span> {dateText} <i>{weekdayText}</i> <i>{timeText}</i></span><span>◉ &nbsp;{pageViews === null ? '—' : pageViews.toLocaleString()}</span></div>
           <div className="language-switch"><span>中</span><b />EN</div>
           <div className="hero-copy">
             <p className="handwriting">Hi,</p>
