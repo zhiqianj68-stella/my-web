@@ -17,7 +17,7 @@ const stories = [
 const projects = [
   {
     title: 'Campus Annual Bill', chinese: '校园年度账单系统', tags: ['Vue3', 'Ant Design', '数据可视化'],
-    href: 'https://2024zuel-report.vercel.app', kind: 'campus',
+    href: 'https://jiangzhiqian.top/project2/', kind: 'campus',
   },
   {
     title: 'LLM-driven Rumor Detection', chinese: '大创项目：模力智鉴', tags: ['Python', 'NLP', '多模态融合'],
