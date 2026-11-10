@@ -70,7 +70,7 @@ function App() {
     if (countStarted.current) return
     countStarted.current = true
 
-    fetch('https://jiangzhiqian-counter.1958278841.workers.dev/count', { method: 'POST' })
+    fetch('https://api.jiangzhiqian.top/count', { method: 'POST' })
       .then(response => {
         if (!response.ok) throw new Error('Counter request failed')
         return response.json()
