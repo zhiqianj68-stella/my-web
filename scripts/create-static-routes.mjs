@@ -1,6 +1,6 @@
 import { copyFile, mkdir } from 'node:fs/promises'
 
-const routes = ['who', 'what', 'why']
+const routes = ['who', 'what', 'why', 'projects']
 const entryFile = new URL('../dist/index.html', import.meta.url)
 
 for (const route of routes) {

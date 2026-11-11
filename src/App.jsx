@@ -1,65 +1,137 @@
-import { useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import './App.css'
 import desktopBackground from './assets/bg-pc.jpg'
 import mobileBackground from './assets/bg-mb.jpg'
 import studentIllustration from './assets/story-student.png'
 import booksIllustration from './assets/story-books.png'
 import signpostIllustration from './assets/story-signpost.png'
+import zuelImage from './assets/projects/project-zuel.webp'
+import investigateImage from './assets/projects/project-investigate.webp'
+import llmImage from './assets/projects/project-llm.webp'
+import timeBankImage from './assets/projects/project-time-bank.webp'
+import { useI18n } from './i18n/context'
 
 const storyIllustrations = [studentIllustration, booksIllustration, signpostIllustration]
 
-const stories = [
-  { number: '01', title: 'Who', chinese: '我是谁？', detail: '学生 / 教育背景 / 实习经历', art: 'student', slug: 'who', summary: '一名持续学习、探索，并通过实践积累经验的学生。', sections: [{ title: '教育背景', body: '记录所学专业、课程经历与阶段性收获。' }, { title: '实践经历', body: '整理实习、校园参与和其他值得回顾的经历。' }] },
-  { number: '02', title: 'What', chinese: '我在做什么？', detail: '研究兴趣 / 项目 / 技能', art: 'books', slug: 'what', summary: '把感兴趣的问题转化为研究、项目与持续练习。', sections: [{ title: '项目实践', body: 'Campus Annual Bill：校园年度账单系统。\nLLM-driven Rumor Detection：大语言模型驱动的谣言检测项目。' }, { title: '关注方向', body: '关注数据可视化、自然语言处理与多模态技术。' }] },
-  { number: '03', title: 'Why', chinese: '为什么做这个网站？', detail: '初衷 / 价值观 / 未来计划', art: 'signpost', slug: 'why', summary: '把学习、项目和思考整理成一处可以持续更新的个人空间。', sections: [{ title: '做这个网站的初衷', body: '记录正在做的事，也让每一段探索都能被回看。' }, { title: '接下来', body: '继续完善项目记录，分享新的学习成果与实践体验。' }] },
+const storyRoutes = [
+  { number: '01', slug: 'who', art: 'student' },
+  { number: '02', slug: 'what', art: 'books' },
+  { number: '03', slug: 'why', art: 'signpost' },
 ]
 
 const projects = [
   {
-    title: 'Campus Annual Bill', chinese: '校园年度账单系统', tags: ['Vue3', 'Ant Design', '数据可视化'],
-    href: 'https://jiangzhiqian.top/project2/', kind: 'campus',
+    id: 'annualBill', tags: ['Vue 3', 'Vue Router', 'Swiper'], time: '2024', image: zuelImage, href: 'https://jiangzhiqian.top/project2/', kind: 'campus',
   },
   {
-    title: 'LLM-driven Rumor Detection', chinese: '大创项目：模力智鉴', tags: ['Python', 'NLP', '多模态融合'],
-    href: 'https://survey-tau-one.vercel.app/admin', kind: 'research',
+    id: 'survey', tags: ['React', 'Vite', 'SCSS'], time: '2026', image: investigateImage, href: 'https://survey-tau-one.vercel.app/admin', kind: 'survey',
   },
+  {
+    id: 'mutualAid', tags: ['Vue 3', 'Node.js', 'MySQL', 'JWT'], time: '2026', image: timeBankImage, href: 'https://github.com/zhiqianj68-stella/mutual-aid-system', kind: 'mutual-aid',
+  },
+  {
+    id: 'speech', tags: ['HTML5', 'MediaDevices', 'Chart.js'], time: '2024', image: llmImage, href: 'https://gitee.com/mumu04/sppech1', kind: 'research',
+  }
 ]
 
-function StoryPage({ story, illustration }) {
+function ProjectCard({ project, copy, detailed = false }) {
+  const content = <>
+    <div className={`project-preview preview-${project.kind}`}>
+      <img src={project.image} alt={copy.alt} loading="lazy" decoding="async" />
+    </div>
+    <div className={`project-info${detailed ? ' project-info-detailed' : ''}`}>
+      <div className="project-title-row"><h3>{copy.title}</h3>{project.href && <span className="project-open" aria-hidden="true">↗</span>}</div>
+      <div className="project-meta-row"><time dateTime={project.time}>{project.time}</time><div className="project-tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div></div>
+      <p className="project-name">{copy.name}</p>
+    </div>
+    {detailed && <ul className="project-description">{copy.points.map(point => <li key={point}>{point}</li>)}</ul>}
+  </>
+
+  return project.href
+    ? <a className={`project-card${detailed ? ' project-card-detailed' : ''}`} href={project.href} target="_blank" rel="noreferrer">{content}</a>
+    : <article className={`project-card${detailed ? ' project-card-detailed' : ''}`}>{content}</article>
+}
+
+function ProjectsPage({ t, locale, setLocale }) {
+  return (
+    <main className="projects-page">
+      <header className="story-page-header">
+        <a className="story-page-brand" href="/">← MY WORLD <span>✦</span></a>
+        <button className="language-switch language-switch-inline" type="button" aria-label={t.language.switchLabel} onClick={() => setLocale(locale === 'zh-CN' ? 'en-US' : 'zh-CN')}>
+          {locale === 'zh-CN' ? t.language.english : t.language.chinese}
+        </button>
+      </header>
+      <section className="projects-page-heading">
+        <p className="story-page-number">{t.projects.pageEyebrow}</p>
+        <h1>{t.projects.pageTitle}</h1>
+        <p>{t.projects.pageDescription}</p>
+        <p className="projects-more-links">{t.projects.moreProjects}<a href="https://github.com/zhiqianj68-stella" target="_blank" rel="noreferrer">GitHub</a> {t.projects.and} <a href="https://gitee.com/JiangZhiqian" target="_blank" rel="noreferrer">Gitee</a></p>
+      </section>
+      <section className="project-grid projects-page-grid" aria-label={t.projects.allLabel}>
+        {projects.map(project => <ProjectCard project={project} copy={t.projects.items[project.id]} detailed key={project.id} />)}
+      </section>
+      <footer className="story-page-footer"><a href="/">MY WORLD</a><span>{t.footer.signoff}</span></footer>
+    </main>
+  )
+}
+
+function StoryPage({ story, copy, illustration, t, locale, setLocale }) {
   return (
     <main className="story-page">
       <header className="story-page-header">
-        <a className="story-page-brand" href="/">MY WORLD <span>✦</span></a>
-        <a className="story-page-back" href="/">← 返回首页</a>
+        <a className="story-page-brand" href="/">← MY WORLD <span>✦</span></a>
+        <button className="language-switch language-switch-inline" type="button" aria-label={t.language.switchLabel} onClick={() => setLocale(locale === 'zh-CN' ? 'en-US' : 'zh-CN')}>
+          {locale === 'zh-CN' ? t.language.english : t.language.chinese}
+        </button>
       </header>
       <section className="story-page-hero">
         <div>
-          <p className="story-page-number">{story.number} / MY STORY</p>
-          <h1>{story.chinese}</h1>
-          <p className="story-page-summary">{story.summary}</p>
+          <p className="story-page-number">{story.number} / {t.navigation.storyLabel}</p>
+          <h1>{copy.chinese}</h1>
+          <p className="story-page-summary">{copy.summary}</p>
         </div>
         <img src={illustration} alt="" />
       </section>
-      <section className="story-page-sections" aria-label={story.chinese}>
-        {story.sections.map((section, index) => (
+      <section className="story-page-sections" aria-label={copy.chinese}>
+        {copy.sections.map((section, index) => (
           <article className="story-page-section" key={section.title}>
             <span>0{index + 1}</span>
             <div><h2>{section.title}</h2><p>{section.body}</p></div>
           </article>
         ))}
       </section>
-      <footer className="story-page-footer"><a href="/">MY WORLD</a><span>Keep exploring, learning and growing.</span></footer>
+      <footer className="story-page-footer"><a href="/">MY WORLD</a><span>{t.footer.signoff}</span></footer>
     </main>
   )
 }
 
 function App() {
+  const { locale, setLocale, t } = useI18n()
   const [activeStory, setActiveStory] = useState(1)
   const [menuOpen, setMenuOpen] = useState(false)
   const [now, setNow] = useState(() => new Date())
   const [pageViews, setPageViews] = useState(null)
   const countStarted = useRef(false)
-  const currentStory = stories.find(story => window.location.pathname === `/${story.slug}`)
+  const lastStoryTap = useRef({ slug: null, time: 0 })
+  const currentStory = storyRoutes.find(story => window.location.pathname === `/${story.slug}`)
+  const isProjectsPage = window.location.pathname.replace(/\/$/, '') === '/projects'
+
+  const handleStoryCardClick = (story, index) => {
+    if (window.matchMedia('(max-width: 760px)').matches) {
+      const tappedAt = Date.now()
+      const previousTap = lastStoryTap.current
+
+      if (previousTap.slug === story.slug && tappedAt - previousTap.time < 500) {
+        lastStoryTap.current = { slug: null, time: 0 }
+        window.location.assign(`/${story.slug}`)
+        return
+      }
+
+      lastStoryTap.current = { slug: story.slug, time: tappedAt }
+    }
+
+    setActiveStory(index)
+  }
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 15_000)
@@ -79,75 +151,72 @@ function App() {
       .catch(error => console.error('Unable to load page view count:', error))
   }, [])
 
-  const dateText = `${now.getFullYear()} / ${now.getMonth() + 1} / ${now.getDate()}`
-  const weekdayText = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(now)
+  const dateText = new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'numeric', day: 'numeric' }).format(now)
+  const weekdayText = new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(now)
   const timeText = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(now)
 
   if (currentStory) {
-    return <StoryPage story={currentStory} illustration={storyIllustrations[stories.indexOf(currentStory)]} />
+    return <StoryPage story={currentStory} copy={t.stories[currentStory.slug]} illustration={storyIllustrations[storyRoutes.indexOf(currentStory)]} t={t} locale={locale} setLocale={setLocale} />
   }
+  if (isProjectsPage) return <ProjectsPage t={t} locale={locale} setLocale={setLocale} />
 
   return (
-    <main className="page-shell" style={{ '--desktop-bg': `url(${desktopBackground})`, '--mobile-bg': `url(${mobileBackground})` }}>
+    <main className={`page-shell${locale === 'en-US' ? ' is-english' : ''}`} style={{ '--desktop-bg': `url(${desktopBackground})`, '--mobile-bg': `url(${mobileBackground})` }}>
       <header className="topbar">
-        <a className="wordmark" href="#home" aria-label="回到首页">MY WORLD<span>✦</span></a>
-        <nav className={menuOpen ? 'main-nav is-open' : 'main-nav'} aria-label="主导航">
-          <a href="#about" onClick={() => setMenuOpen(false)}>关于我</a>
-          <a href="#projects" onClick={() => setMenuOpen(false)}>项目作品</a>
-          <a href="mailto:hello@example.com" onClick={() => setMenuOpen(false)}>联系我</a>
+        <a className="wordmark" href="#home" aria-label={t.navigation.homeLabel}>MY WORLD<span>✦</span></a>
+        <nav className={menuOpen ? 'main-nav is-open' : 'main-nav'} aria-label={t.navigation.label}>
+          <a href="#about" onClick={() => setMenuOpen(false)}>{t.navigation.about}</a>
+          <a href="#projects" onClick={() => setMenuOpen(false)}>{t.navigation.projects}</a>
+          <a href="mailto:hello@example.com" onClick={() => setMenuOpen(false)}>{t.navigation.contact}</a>
         </nav>
-        <button className="menu-toggle" type="button" aria-label="切换导航" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}><span /><span /></button>
+        <button className="menu-toggle" type="button" aria-label={t.navigation.toggleMenu} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}><span /><span /></button>
       </header>
 
       <section className="hero" id="home" aria-labelledby="hero-title">
         <div className="hero-scene">
           <div className="scene-meta"><span><span className="meta-icon">▦</span> {dateText} <i>{weekdayText}</i> <i>{timeText}</i></span><span>◉ &nbsp;{pageViews === null ? '—' : pageViews.toLocaleString()}</span></div>
-          <div className="language-switch"><span>中</span><b />EN</div>
+          <button className="language-switch" type="button" aria-label={t.language.switchLabel} onClick={() => setLocale(locale === 'zh-CN' ? 'en-US' : 'zh-CN')}>
+            {locale === 'zh-CN' ? t.language.english : t.language.chinese}
+          </button>
           <div className="hero-copy">
-            <p className="handwriting">Hi,</p>
-            <h1 id="hero-title">Welcome to<br /><em>My World</em></h1>
-            <p className="hero-chinese">在探索中，成为更好的自己。</p>
-            <p className="hero-words">Explore <span>·</span> Learn <span>·</span> Build <span>·</span> Grow</p>
+            <p className="handwriting">{t.hero.greeting}</p>
+            <h1 id="hero-title">{t.hero.title}<br /><em>{t.hero.titleEmphasis}</em></h1>
+            <p className="hero-chinese">{t.hero.description}</p>
+            <p className="hero-words">{t.hero.values.map((value, index) => <Fragment key={value}>{index > 0 && <span>·</span>}{value}</Fragment>)}</p>
           </div>
           <div className="paper-plane" aria-hidden="true">➤</div>
           <div className="hero-doodle" aria-hidden="true">⌁</div>
         </div>
 
         <div className="story-grid" id="about">
-          {stories.map((story, index) => (
-            <article className={`story-card ${activeStory === index ? 'is-active' : ''}`} key={story.number} onClick={() => setActiveStory(index)} onDoubleClick={() => { if (window.matchMedia('(max-width: 760px)').matches) window.location.assign(`/${story.slug}`) }}>
+          {storyRoutes.map((story, index) => {
+            const copy = t.stories[story.slug]
+            return <article className={`story-card ${activeStory === index ? 'is-active' : ''}`} key={story.number} onClick={() => handleStoryCardClick(story, index)}>
               <span className="story-number">{story.number}</span>
-              <span className="story-title">{story.title}</span>
+              <span className="story-title">{copy.title}</span>
               <span className={`story-art art-${story.art}`} style={{ backgroundImage: `url(${storyIllustrations[index]})` }} aria-hidden="true" />
-              <a className="story-arrow" href={`/${story.slug}`} aria-label={`了解更多：${story.chinese}`}>↗</a>
-              <span className="story-chinese">{story.chinese}</span>
-              <span className="story-detail">{story.detail} …</span>
+              <a className="story-arrow" href={`/${story.slug}`} aria-label={`${t.navigation.storyMore}: ${copy.chinese}`}>↗</a>
+              <span className="story-chinese">{copy.chinese}</span>
+              <span className="story-detail">{copy.detail} …</span>
             </article>
-          ))}
+          })}
         </div>
-        <div className="story-hint"><span>←</span> 左右滑动 / 点击卡片 <span>→</span></div>
-        <div className="story-dots" aria-label="选择个人介绍卡片">
-          {stories.map((story, index) => <button key={story.number} aria-label={`显示 ${story.title}`} aria-pressed={activeStory === index} onClick={() => setActiveStory(index)} />)}
+        <div className="story-hint"><span>←</span> {t.hero.storyHint} <span>→</span></div>
+        <div className="story-dots" aria-label={t.navigation.storyCards}>
+          {storyRoutes.map((story, index) => <button key={story.number} aria-label={`${t.navigation.storyMore}: ${t.stories[story.slug].title}`} aria-pressed={activeStory === index} onClick={() => setActiveStory(index)} />)}
         </div>
       </section>
 
       <section className="projects-section" id="projects" aria-labelledby="projects-title">
         <div className="section-heading">
-          <div><h2 id="projects-title">Projects <span>✦</span></h2><p><i /> 项目快览 <i /></p></div>
-          <a className="view-all" href="#project-list">VIEW ALL <span>→</span></a>
+          <div><h2 id="projects-title">{t.navigation.projects} <span>✦</span></h2><p><i /> {t.hero.projectHint} <i /></p></div>
+          <a className="view-all" href="/projects">{t.hero.viewAll} <span>→</span></a>
         </div>
         <div className="project-grid" id="project-list">
-          {projects.map(project => (
-            <a className="project-card" href={project.href} target="_blank" rel="noreferrer" key={project.title}>
-              <div className={`project-preview preview-${project.kind}`} aria-hidden="true">
-                <div className="preview-window"><span className="preview-brand">✦ {project.kind === 'campus' ? 'Campus' : 'Research Lab'}</span><div className="preview-content"><div className="preview-chart"><i /><i /><i /><i /><i /><i /></div><div className="preview-side"><i /><i /><i /></div></div></div>
-              </div>
-              <div className="project-info"><div><h3>{project.title}</h3><p>{project.chinese}</p></div><div className="project-tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div><span className="project-open" aria-hidden="true">↗</span></div>
-            </a>
-          ))}
+          {projects.map(project => <ProjectCard project={project} copy={t.projects.items[project.id]} key={project.id} />)}
         </div>
       </section>
-      <footer className="footer"><span>用好奇心记录每一步。</span><span>© 2026 My World</span></footer>
+      <footer className="footer"><span>{t.footer.home}</span><span>{t.footer.copyright}</span></footer>
     </main>
   )
 }
